@@ -1,24 +1,47 @@
-import logo from './logo.svg';
-import './App.css';
+import { useState, useEffect } from "react";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import "./App.css";
+import PersonDetails from "./PersonDetails";
+import SocialCard from "./SocialCard";
+import axios from 'axios';
 
 function App() {
+  const [allUsers, setAllUsers] = useState([]);
+  const [users, setUsers] = useState();
+
+  useEffect(() => {
+    let baseURL = "https://swapi.dev/api/people"
+    axios.get(baseURL).then((response) => {
+      setUsers(response.data.results);
+      console.log('abc', response.data)
+    })
+    
+  }, []);
+
+
+
   return (
+
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <h2>SocialCard</h2>
+      <div>
+        <BrowserRouter>
+          <Routes>
+            <Route
+              exact
+              path="/"
+              element={<SocialCard users={users} />}
+            />
+            <Route
+              path="/PersonDetails"
+              element={<PersonDetails />}
+            />
+          </Routes>
+        </BrowserRouter>
+
+      </div>
     </div>
+
   );
 }
 
